@@ -14,7 +14,24 @@ tinymce.init({
   'removeformat | help',
   content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
 });
-
+const enviarProfeOak = async function(){
+  
+  let nro = this.nro;
+  let res = await Swal.fire({
+    title: "Desea realmente continuar?",
+    text: "Esta intentando enviar el pokemon al profesor oak, esto no se puede revertir",
+    icon: "warning",
+    showCancelButton:true,
+    confirmButtonText: "Si! hazlo!"
+  });
+  if(res.isConfirmed){
+   pokemones.splice(nro,1);
+    cargarTabla();
+    Swal.fire("Pokemon descartado","Pokemon enviado al profesor","info");
+  }else {
+    Swal.fire("Cancelado","Operacion cancelada","Error");
+  }
+};
 const pokemones = [];//Definir un arreglo
 const cargarTabla = ()=>{
 
@@ -61,7 +78,17 @@ for(let i=0; i < pokemones.length; ++i){
   //Cuando quiero definir texto, innerText
   //Cuando quiero definir directamente el html, innerHTML
   tdDescripcion.innerHTML = p.descripcion;
-  //TODO: Que hago con las acciones!
+
+  let boton = document.createElement("button");
+  boton.classList.add("btn","btn-danger");
+  boton.innerText = "Enviar al profesor Oak";
+
+  boton.nro = i;
+  tdAcciones.appendChild(boton);
+  tdAcciones.classList.add("text-center");
+
+  boton.addEventListener("click",enviarProfeOak);
+
   //5. Agregar los td al tr
   tr.appendChild(tdNro);
   tr.appendChild(tdNombre);
